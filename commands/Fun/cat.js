@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const superagent = require("superagent");
+
 const randomPuppy = require("random-puppy")
 
 exports.run = async (client,message,args) => {
