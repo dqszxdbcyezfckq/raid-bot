@@ -5,7 +5,6 @@ const chalk = require('chalk');
 const fs = require('fs');
 const moment = require('moment');
 require('./util/eventLoader')(client);
-const YTDL = require("ytdl-core");
 const redcolor = chalk.keyword('red');
 const orangecolor = chalk.keyword('orange');
 const yellowcolor = chalk.keyword('yellow');
