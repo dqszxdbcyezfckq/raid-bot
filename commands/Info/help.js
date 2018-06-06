@@ -14,9 +14,9 @@ exports.run = (client, message, params) => {
   let prefix = prefixes[message.guild.id].prefixes;
     var HelpEmbed = new Discord.RichEmbed()
     .setColor("#689AFB")
-    .addField("//helpInfo", "Liste des commandes information")
-    .addField("//helpMod", "Liste des commandes modération")
-    .addField("//helpFun", "Liste des commandes fun")
+    .addField(prefix + "helpInfo", "Liste des commandes information")
+    .addField(prefix + "helpMod", "Liste des commandes modération")
+    .addField(prefix + "helpFun", "Liste des commandes fun")
     .setFooter("๖̶̶̶ζ͜͡Bot par Kawaii Alex ͜͡ζ̶̶̶๖", client.users.get('281125214098685954').displayAvatarURL);
 
     message.channel.send(HelpEmbed)
