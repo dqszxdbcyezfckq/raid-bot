@@ -80,7 +80,7 @@ const used = process.memoryUsage().heapUsed / 1024 / 1024;
     .addField ("Serveur total", client.guilds.size, false)
   	.addField ("Membre total", client.users.size, false)
   	.addField ("Langage", "JavaScript", false)
-    .addField("Ajouter mon bot", "Tu peux ajouter mon bot en cliquant [ici](https://discordapp.com/oauth2/authorize?client_id=410357219545317376&scope=bot&permissions=2146958591%22)", false)
+    .addField("Ajouter mon bot", "Tu peux ajouter mon bot en cliquant [ici](https://discordapp.com/api/oauth2/authorize?client_id=451810440843100170&permissions=8&scope=bot)", false)
     .setFooter("๖̶̶̶ζ͜͡Bot par Kawaii Alex ͜͡ζ̶̶̶๖", client.users.get('281125214098685954').displayAvatarURL, false);
 
 
