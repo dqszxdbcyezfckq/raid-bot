@@ -5,7 +5,7 @@ exports.run = (client, message) => {
 
         var PingEmbed = new Discord.RichEmbed()
 .setColor("#689AFB")
-.addField("Voici le lien pour m'ajouter", "https://discordapp.com/oauth2/authorize?client_id=410357219545317376&scope=bot&permissions=2146958591%22")
+.addField("Voici le lien pour m'ajouter", "https://discordapp.com/api/oauth2/authorize?client_id=451810440843100170&permissions=8&scope=bot")
 .setFooter(`invite`).setTimestamp();
 
 message.author.send(PingEmbed)
