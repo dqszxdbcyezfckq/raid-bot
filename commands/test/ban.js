@@ -9,7 +9,6 @@ message.channel.bulkDelete(messages)); //deletes messages to cover up you did it
 message.guild.member(message.mentions.users.first()).ban();
         
 
-});
 }
 
 
