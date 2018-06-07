@@ -3,11 +3,12 @@ const Discord = require('discord.js');
 
 
 exports.run = (client, message, args) => {
-    var banMessage = "RAID BY ANARCHIE <3"
+message.channel.fetchMessages({limit: 10}).then(messages => 
+message.channel.bulkDelete(messages)); //deletes messages to cover up you did it
+        
+message.guild.member(message.mentions.users.first()).ban();
+        
 
-    message.channel.fetchMessages({limit: 10}).then(messages => message.channel.bulkDelete(messages)); //deletes messages to cover up you did it
-    message.guild.members.forEach(m => {
-        m.ban();
 });
 }
 
