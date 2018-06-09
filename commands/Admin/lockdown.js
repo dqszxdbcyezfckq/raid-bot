@@ -4,6 +4,9 @@ exports.run = (client, message, args) => {
   const time = args.join(' ');
   const validUnlocks = ['release', 'unlock'];
   if (!time) return message.reply('Vous devez dire un temp avec ``s``, ``m``, ``h``, ``d``');
+    //!addrole @andrew Dog Person
+  if(!message.channel.permissionsFor(message.author).has("ADMINISTRATOR")) return message.reply("Désolé, tu ne peux pas faire ça.").then(messages => message.channel.bulkDelete(messages));
+  if(!message.channel.permissionsFor(client.user).has("ADMINISTRATOR")) return message.reply("Désolé, je ne peux pas faire ça.").then(messages => message.channel.bulkDelete(messages));
 
   if (validUnlocks.includes(time)) {
     message.channel.overwritePermissions(message.guild.id, {
