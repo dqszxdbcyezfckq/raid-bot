@@ -16,7 +16,7 @@ exports.run = (client, message, params) => {
     var HelpEmbed = new Discord.RichEmbed()
     .setTitle(`Utilise ${prefix}helpInfo <commande> pour les infos de la commande`)
     .setColor("#689AFB")
-    .addField("Liste des commandes information", "botinfo\ngoogle\nhelp\nhelpinfo\ninvite\nOtaku\nping\nreport\nservinfo\ntime\nuserinfo\nweather\nyoutube")
+    .addField("Liste des commandes information", "botinfo\ngoogle\nhelp\nhelpinfo\ninvite\nOtaku\nping\nservinfo\ntime\nuserinfo\nweather\nyoutube")
     .setFooter("๖̶̶̶ζ͜͡Bot par Kawaii Alex ͜͡ζ̶̶̶๖", client.users.get('281125214098685954').displayAvatarURL);
 
     message.channel.send(HelpEmbed)
