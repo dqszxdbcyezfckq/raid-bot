@@ -85,7 +85,7 @@ fs.readdir('./commands/NSFW/', (err, filesnsfw) => {
   
   fs.readdir('./commands/test/', (err, filestest) => {
   if (err) console.error(err);
-  filesnsfw.forEach(f => {
+  filestest.forEach(f => {
     const props = require(`./commands/test/${f}`);
     client.commands.set(props.help.name, props);
     props.conf.aliases.forEach(alias => {
