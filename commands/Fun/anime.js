@@ -1,50 +1,91 @@
 const Discord = require('discord.js');
-const https = require('http');
-const parseXML = require('xml2js').parseString;
-const request = require('request');
 
-module.exports.run = (bot, message, args) => {
+const fs = require("fs")
+const config = require('../../config.json')
+    const Kitsu = require('kitsu.js')
+    const kitsu = new Kitsu()
+    
+    exports.run = (client, message, args) => {
 
-  var tag = args.join('+');
-  var error54 = args.slice(0).join(' ');
-  if (!tag || !error54) return message.channel.send(`:pencil: | Pouvez vous refaire la commande en me donnant le nom de l'anime, please ?`)
-    request(`https://myanimelist.net/api/anime/search.xml?q=${tag}`, function (error, response, body) {
-      if (error!=null) {
-        message.channel.send(`:x: | Je n'est rien trouvé sur **${error54}**`);
-      }else {
-        const parseString = require('xml2js').parseString;
-        parseString(body, function (err, result) {
-            const decode = require('he').decode;
-            var anime = result.anime.entry[0];
-            message.channel.send({embed:new Discord.RichEmbed()
-                                  .setAuthor(`MyAnimeList`,`https://lh3.googleusercontent.com/gdbHihUd8AA6tpBmnkQ8_hAhyxcEWMhy89Ptl-64adBktV-wj3343StB0Z9LNB0Q7bM=w300`)
-              .setTitle(anime.title[0] + ` - Resultat de la recherche`)
-              .setURL(`https://myanimelist.net/anime/${anime.id[0]}`)
-              .setImage(anime.image[0])
-              .addField(`»Synopsis`, decode(anime.synopsis[0].replace(/<[^>]*>/g, ''), false).split('\n')[0])
-              .addField(`»Titre englais`,`${anime.english[0]!='' ? anime.english[0] : '­'}`,false)
-              .addField(`»Nombre d'episodes`,`${anime.episodes[0]!='' ? anime.episodes[0] : '­'}`,true)
-           //   .addField(`External Link:`,`${anime.id[0]!='' ? `[MyAnimeList](https://myanimelist.net/anime/${anime.id[0]})` : '­'}`,true)
-              .addField(`»Score`,`${anime.score[0]!='' ? anime.score[0] : '­'}`,true)
-              .addField(`»Statuts`,`${anime.status[0]}`,true)
-              .addField(`»Type`,`${anime.type[0]}`,true)
-              .addField(`»Date de début`, anime.start_date[0], true)
-              .addField(`»Date de fin`, anime.end_date[0], true)
-              .setColor(`${message.guild.me.displayHexColor!=='#00000' ? message.guild.me.displayHexColor : 0xffffff}`)
-        });
-      })}
-    }).auth('CCsP', 'BonkRunner124210');
-}
+        try {
 
-exports.conf = {
-    enabled: true,
-    guildOnly: false,
-    aliases: [],
-    permLevel: 0
-  };
+            let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
+            if(!prefixes[message.guild.id]){
+              prefixes[message.guild.id] = {
+                prefixes: config.prefix
+              };
+            }
+            let prefix = prefixes[message.guild.id].prefixes;
 
-  exports.help = {
-    name: 'anime',
-    description: 'Donne votre avatar ( et non celui d\'un autre )',
-    usage: 'anime'
-  };
+        if(!args[0]) return message.channel.send(':x: | Veuillez me donnez un nom d\'anime à rechercher. \n```\nUtilisation: ' + prefix + "anime <nom de l'anime>\n```");
+
+        let search = args.toString().replace(/,/g, ' ');
+        kitsu.searchAnime(search)
+            .then(result => {
+                if (result.length === 0) {
+                    return message.channel.send(`:x: | Je n'ai pas trouvé de resultat pour: **${search}**.`);
+                }
+                return prepareEmbed(message, result[0]);
+            })
+            .catch(err => {
+                console.error(err)
+                
+                return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la recherche veuillez envoyer un report de la commande si ce message persiste.');
+            });
+        } catch(err) {
+            console.error(err)
+            return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste.');
+          };
+    }
+    
+    function prepareEmbed(message, item) {
+
+        try {
+        const { slug, synopsis, titles, averageRating, posterImage, episodeCount, showType } = item
+        const url = `https://kitsu.io/anime/${slug}`
+    
+        var AnimeEmbed = new Discord.RichEmbed()
+        .setTitle(titles.romaji)
+        .setURL(url)
+        .setDescription(`**Synopsis:**\n${synopsis.substring(0, 450)}...`)
+        .setColor(Math.floor(Math.random() * 16777214) + 1)
+        .addField("❯ Type", fixCase(showType), true)
+        .addField("❯ Episodes", episodeCount, true)
+        .addField("❯ Évaluation", averageRating, true)
+        .setAuthor(`${message.author.tag}`, message.author.displayAvatarURL)
+        .setThumbnail(posterImage.small)
+        
+        message.channel.send(AnimeEmbed);
+
+    } catch(err) {
+        console.error(err);
+        return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste');
+      };
+
+    }
+
+
+    function fixCase(str) {
+
+        try {
+
+        return str.toLowerCase().replace(/(^| )(\w)/g, s => s.toUpperCase())
+    
+    } catch(err) {
+        console.error(err)
+        return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste')
+      };
+    }
+    
+    exports.conf = {
+        enabled: true,
+        guildOnly: false,
+        aliases: [],
+        permLevel: 0
+      };
+      
+      exports.help = {
+        name: 'anime',
+        description: 'Vous donne des infos sur l\'anime de votre choix',
+        usage: 'anime <anime a chercher>'
+      };

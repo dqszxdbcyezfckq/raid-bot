@@ -1,11 +1,9 @@
-const Discord = require('discord.js');
-var http = require("http");
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-var xhr = new XMLHttpRequest();
-var axios = require('axios');
+
 const config = require('../../config.json');
-let newUsers = new Discord.Collection();
-exports.run = (client, message) => {
+const Discord = require("discord.js")
+exports.run = (client, message, args) => {
+
+    try {
 
   function getpollinfo() {
 
@@ -27,7 +25,8 @@ exports.run = (client, message) => {
       requestStop = false;
 
 
-      message.channel.send("De quoi va parler le sondage ?");
+      
+      message.channel.send("De quoi va parler du sondage ?");
 
       const filter = m => m.author.id === message.author.id;
 
@@ -66,17 +65,14 @@ exports.run = (client, message) => {
       }
 
       if(d != "-1" && isTimed == true) { //edited kek
-          console.log("got days");
 
           fixedvalued = timeresultkek.replace("d", "");
 
           reelfixedvaluekekd = fixedvalued * 86400000; //1 day
 
-          console.log("Created a poll with a time of " + reelfixedvaluekekd + " day(s)!");
-
 
       message.channel.send(pollstuff).then(messageToReact => {
-
+        
        var idk = messageToReact.react("👍").catch(err => message.channel.send((err))).then(msg => { //todo: custom emojis?!
 
 
@@ -165,7 +161,7 @@ exports.run = (client, message) => {
                if(realnumberrr >= config.rvotes) { //thumbs up
 
                    message.channel.send("Resultats:");
-                   message.channel.send("Oui: " + realnumberrr);
+                   message.channel.send("𝑶𝒖𝒊: " + realnumberrr);
 
                }
                message.channel.send("Resultats:");
@@ -197,7 +193,7 @@ exports.run = (client, message) => {
                console.log("Collected " + realnumberrrr + " votes for thumbs down");
 
 
-               message.channel.send("Non: " + realnumberrrr);
+               message.channel.send("𝑵𝒐𝒏: " + realnumberrrr);
 
            })
        })
@@ -449,7 +445,7 @@ exports.run = (client, message) => {
 
       else if (m == "-1" && d == "-1" && s == "-1" && h == "-1") {
 
-          message.reply("Format invalide. Utilise `s`, `m`, `h` ou `d`!")
+          message.reply(":x: **|** Format invalide. Utilise `s`, `m`, `h` ou `d`!")
       }
 
 
@@ -536,9 +532,13 @@ exports.run = (client, message) => {
      message.channel.send(getpollinfo())
       //startVote();
 
+    } catch(err) {
+        console.error(err)
+        return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste')
+      };
+
 
   } //finish command
-
 
 exports.conf = {
     enabled: true,
@@ -549,6 +549,6 @@ exports.conf = {
 
   exports.help = {
     name: 'pollc',
-    description: 'Faîtes des sondages avec réponses ``oui`` ou ``non``',
-    usage: 'Vous aurez juste a suivre les étapes c:\n**Faîtes bien attention**, pour le temp il faut mettre une durée (ex: 1s/m/h/d)'
+    description: 'Faîtes des sondages avec pour réponses ``oui`` ou ``non``',
+    usage: 'pollc\nEnsuite vous aurez juste a suivre les étapes\n**Faîtes bien attention**, pour le temp il faut mettre une durée (ex: 1s/m/h/d)'
   };
