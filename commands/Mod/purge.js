@@ -1,24 +1,23 @@
 const Discord = require('discord.js');
 exports.run = (client, message, args) => {
-  const messagecount = parseInt(args.join(' '));
-  var PurgeEmbed = new Discord.RichEmbed()
-    .setColor("#689AFB")
-    .addField("Purge", messagecount + " message supprimé")
-    .setFooter(`${message.author.username} || Purge`).setTimestamp();
 
-  if (!message.channel.permissionsFor(message.author).has("MANAGE_MESSAGES")) {
-    message.reply (" Tu n'as pas la permission").then(msg => {msg.delete(5000)});
-
-  }
-if (!message.channel.permissionsFor(client.user).has("MANAGE_MESSAGES")) {
-    message.reply ("Je n'es pas la permission ").then(msg => {msg.delete(5000)})
-  }
-
-  message.channel.fetchMessages({
-    limit: messagecount
+  try {
     
-  }).then(messages => message.channel.bulkDelete(messages))
-  message.channel.send(PurgeEmbed).then(msg => {msg.delete(5000)});
+    const messagecount = parseInt(args.join(' '));
+  if(!messagecount) return message.channel.send(".")
+
+  if(!message.channel.permissionsFor(message.author).has("MANAGE_MESSAGES")) return message.channel.send(':x: | Tu n\'as pas les droits.\nTu dois avoir les droits: "Gérer les messages"\n```');
+  if(!message.channel.permissionsFor(client.user).has("MANAGE_MESSAGES")) return message.channel.send(':x: | Je n\'ai pas les droits.\nTu dois avoir les droits: "Gérer les messages"\n```');
+  
+  message.channel.fetchMessages({
+    limit: messagecount + 1
+  }).then(messages => message.channel.bulkDelete(messages));
+
+} catch(err) {
+  console.error(err)
+  return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste.')
+};
+
 };
 
 
@@ -29,7 +28,7 @@ if (!message.channel.permissionsFor(client.user).has("MANAGE_MESSAGES")) {
     enabled: true,
     guildOnly: false,
     aliases: [],
-    permLevel: 2
+    permLevel: 0
   };
   
   exports.help = {

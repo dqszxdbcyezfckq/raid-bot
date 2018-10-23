@@ -1,31 +1,31 @@
-const {RichEmbed} = require('discord.js');
-const Discord = require('discord.js');
-const client = new Discord.Client();
-const {parseUser} = require('../../util/parseUser.js');
 exports.run = (client, message, args) => {
 
-    if(!message.channel.permissionsFor(message.author).has("KICK_MEMBERS")) return message.channel.send("Tu n'as pas les droits").then(msg => {msg.delete(5000)});;
-    if(!message.channel.permissionsFor(client.user).has("KICK_MEMBERS")) return message.channel.send("Je n'ai pas les droits").then(msg => {msg.delete(5000)});;
+  try {
+const user = message.mentions.users.first();
+ if(!user) return message.channel.send(':x: | Tu dois mentionner un utilisateur à ban.\n```\nUtilisation: ' + prefix + "kick <mention>'\n```");
+  const member = message.guild.member(user) || null;
+     if (member) {
+      if (member.highestRole.position >= message.member.highestRole.position) 
+          message.channel.send('Le membre ciblé a une position plus ou égale a la vôtre au niveau des rôle. Veuillez vérifier les  hauteur de vos rôle puis réessayer si le problème persiste merci de contactez le devellopeur.').then(msg => {msg.delete(5000)})
+   }else if (user.id === message.author.id) {
+       message.channel.send('Tu ne peux pas faire ca sur toi meme');
+       return
+    }else{
+  if(!message.channel.permissionsFor(message.author).has("KICK_MEMBERS")) return message.channel.send(':x: | Tu n\'as pas les droits.\nTu dois avoir les droits: "Expulser des membres"\n```');
+  if(!message.channel.permissionsFor(client.user).has("KICK_MEMBERS")) return message.channel.send(':x: | Je n\'ai pas les droits.\nTu dois avoir les droits: "Expulser des membres"\n```');
     var kUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-    if(!kUser) return message.channel.send("Je ne trouve pas cette utilisateur").then(msg => {msg.delete(5000)});
-    let kReason = args.join(" ").slice(22);
-    if (kUser.highestRole.position >= message.member.highestRole.position)  return message.channel.send("Tu ne peux pas le kick").then(msg => {msg.delete(5000)});;
+    if(!args[0]) return message.channel.send(":x: | Veuillez mentionnez un utilisateur.")
+    if(!kUser) return message.channel.send(":x: | Je ne trouve pas cette utilisateur.");
+    if (kUser.highestRole.position >= message.member.highestRole.position)   return message.channel.send(":x: | Tu ne peux pas le kick, cette utilisateur est au dessus de toi."); 
 
-    let kickEmbed = new Discord.RichEmbed()
-    .setDescription("~Kick~", false)
-    .setColor("#689AFB", false)
-    .addField("Utilisateur kick", `${kUser.tag} ID ${kUser.tag}`, false)
-    .addField("Kick par", `${message.author.tag} with ID ${message.author.id}`, false)
-    .addField("Kick dans", `<#${message.channel.id}>`, false)
-    .addField("Heure", message.createdAt, false)
-    .addField("Raison", kReason, false);
+    message.channel.send(`:white_check_mark: | ${kUser} a été kick avec succès !`);
+    message.guild.member(kUser).kick();
+}
+  } catch(err) {
+    console.error(err)
+    return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste.')
+  };
 
-    let kickChannel = message.guild.channels.find(`name`, "otaku-logs");
-    if(!kickChannel) return message.channel.send("Je ne trouve pas le salon ``otaku-logs``.").then(msg => {msg.delete(5000)});
-
-    message.channel.send(`:white_check_mark: | ${kUser} à été kick avec succès`).then(msg => {msg.delete(5000)});
-    message.guild.member(kUser).kick(kReason);
-    kickChannel.send(kickEmbed);
 }
 
 
@@ -33,11 +33,11 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: ['k'],
-  permLevel: 2
+  permLevel: 0
 };
 
 exports.help = {
   name: 'kick',
   description: 'Kick l\'utilisateur mentionné',
-  usage: 'kick [mention] [reason]'
+  usage: 'kick <mention>'
 };

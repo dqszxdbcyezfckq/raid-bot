@@ -1,36 +1,72 @@
 const Discord = require("discord.js");
+const fs = require("fs");
+const config = require('../../config.json')
 exports.run = async (client, message, args) => {
 
-  //!addrole @andrew Dog Person
-  if(!message.channel.permissionsFor(message.author).has("MANAGE_ROLES")) return message.reply("Désolé, tu ne peux pas faire ça.").then(messages => message.channel.bulkDelete(messages));
-  if(!message.channel.permissionsFor(client.user).has("MANAGE_ROLES")) return message.reply("Désolé, je ne peux pas faire ça.").then(messages => message.channel.bulkDelete(messages));
-  let rMember = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0]);
-  if(!rMember) return message.reply("Impossible de trouver cet utilisateur.").then(messages => message.channel.bulkDelete(messages));
-  let role = args.join(" ").slice(22);
-  if(!role) return message.reply("Spécifiez un rôle!").then(messages => message.channel.bulkDelete(messages));
-  let gRole = message.guild.roles.find(`name`, role);
-  if(!gRole) return message.reply("Je ne trouve pas ce rôle.").then(messages => message.channel.bulkDelete(messages));
+  try {
+    const user = message.mentions.users.first();
+ if(!user) return message.channel.send(':x: | Tu dois mentionner un utilisateur à ban.\n```\nUtilisation: ' + prefix + "addrole <mention> <nom du rôle>'\n```");
+  const member = message.guild.member(user) || null;
+     if (member) {
+      if (member.highestRole.position >= message.member.highestRole.position) 
+          message.channel.send('Le membre ciblé a une position plus ou égale a la vôtre au niveau des rôle. Veuillez vérifier les  hauteur de vos rôle puis réessayer si le problème persiste merci de contactez le devellopeur.').then(msg => {msg.delete(5000)})
+   }else if (user.id === message.author.id) {
+       message.channel.send('Tu ne peux pas faire ca sur toi meme');
+       return
+    }else{
+ if(!message.channel.permissionsFor(message.author).has("MANAGE_ROLES")) return message.channel.send(':x: | Tu n\'as pas les droits.\n```js\nTu dois avoir les droits: "Gérer les rôles"\n```');
+  if(!message.channel.permissionsFor(client.user).has("MANAGE_ROLES")) return message.channel.send(':x: | Je n\'ai pas les droits.\n```js\nJe dois avoir les droits: "Gérer les rôles"\n```');
 
-  if(rMember.roles.has(gRole.id)) return message.reply("Il a déja ce rôle.").then(messages => message.channel.bulkDelete(messages));
+  let rMember = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0]);
+  if(!rMember) return message.channel.send(":x: | Je ne trouve pas cette utilisateur.");
+
+  let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
+  if(!prefixes[message.guild.id]){
+    prefixes[message.guild.id] = {
+      prefixes: config.prefix
+    };
+  }
+  let prefix = prefixes[message.guild.id].prefixes;
+
+  var HelpEmbed2 = new Discord.RichEmbed()
+  .setTitle(`Commande: addrole`)
+  .setColor(Math.floor(Math.random() * 16777214) + 1)
+  .setDescription("**Description**: Ajouter un rôle a l\'utilisateur mentionné\n**Rappel**: Les crochets tels que [] ou <> ne sont pas a utiliser lors de l'utilisation des commandes.")
+  .addField("**Utilisation**:", 'addrole <mention> <nom du rôle>')
+  .addField("**Aliase**:", `${prefix}ar`)
+  
+  if(!args[0]) return message.channel.send(HelpEmbed2);
+
+  let role = args.join(" ").slice(22);
+  if(!role) return message.reply(":x: | Tu dois définir un rôle.\n```\nUtilisation: " + prefix + "addrole <mention> <nom du rôles>\n```");
+  let gRole = message.guild.roles.find(`name`, role);
+  if(!gRole) return message.reply(":x: | Je ne trouve pas ce rôle.");
+
+  if(rMember.roles.has(gRole.id)) return message.reply(":x: | Il a déjà ce rôle.");
   await(rMember.addRole(gRole.id));
 
   try{
-    await rMember.send(`Félicitations, vous avez reçu le rôle ${gRole.name}`)
-    message.channel.send(`${rMember} a reçu le rôle ${gRole.name}.`)
+    message.channel.send(`**<@${rMember.id}>** a reçu le rôle **${gRole.name}**.`)
   }catch(e){
-    message.channel.send(`<@${rMember.id}> a reçu le rôle **${gRole.name}**. J'ai essayé de le MP, mais ces MP sont bloqués.`).then(messages => message.channel.bulkDelete(messages))
+    message.channel.send(`**<@${rMember.id}>** a reçu le rôle **${gRole.name}**.`);
   }
+}
+} catch(err) {
+  console.error(err)
+  return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste.')
+};
+
 }
 
 exports.conf = {
     enabled: true,
     guildOnly: false,
     aliases: ['ar'],
-    permLevel: 2
+    permLevel: 0
   };
   
   exports.help = {
     name: 'addrole',
     description: 'Donne un rôle a la personne que vous voulez',
-    usage: 'addrole [mention] [nom du rôle]'
+    usage: 'addrole <mention> <nom du rôle>'
   };
