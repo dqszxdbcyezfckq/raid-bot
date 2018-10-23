@@ -1,32 +1,48 @@
-const Discord = require('discord.js');
-const {RichEmbed} = require('discord.js');
+const Discord = require("discord.js")
+const fs = require("fs")
+const config = require('../../config.json')
 exports.run = (client, message, args) => {
 
-  if(!message.member.hasPermission("BAN_MEMBERS")) return message.channel.send("Tu n'as pas les droits").then(msg => {msg.delete(5000)});
+  try {
+
+   let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
+    if(!prefixes[message.guild.id]){
+      prefixes[message.guild.id] = {
+        prefixes: config.prefix
+      };
+    }
+    let prefix = prefixes[message.guild.id].prefixes;
+
+    if(!args[0]) return message.channel.send(':x: | Tu dois mentionner un utilisateur à ban.\n```\nUtilisation: ' + prefix + "ban <mention>\n```");
+
+    
+ const user = message.mentions.users.first();
+ if(!user) return message.channel.send(':x: | Tu dois mentionner un utilisateur à ban.\n```\nUtilisation: ' + prefix + "ban <mention>\n```");
+  const member = message.guild.member(user) || null;
+     if (member) {
+      if (member.highestRole.position >= message.member.highestRole.position) 
+          message.channel.send('Le membre ciblé a une position plus ou égale a la vôtre au niveau des rôle. Veuillez vérifier les  hauteur de vos rôle puis réessayer si le problème persiste merci de contactez le devellopeur.').then(msg => {msg.delete(5000)})
+   }else if (user.id === message.author.id) {
+       message.channel.send('Tu ne peux pas faire ca sur toi meme');
+       return
+    }else{
+
+  if(!message.channel.permissionsFor(message.author).has("BAN_MEMBERS")) return message.channel.send(':x: | Tu n\'as pas les droits.\n```js\nTu dois avoir les droits: "Bannir des membres"\n```');
+  if(!message.channel.permissionsFor(client.user).has("BAN_MEMBERS")) return message.channel.send(':x: | Je n\'ai pas les droits.\n```js\nJe dois avoir les droits: "Bannir des membres"\n```');
 
   let bUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-  if(!bUser) return message.channel.send("Can't find user!");
+  if(!bUser) return message.channel.send(":x: | Je ne trouve pas cette utilisateur.");
   let bReason = args.join(" ").slice(22);
-  if (bUser.highestRole.position >= message.member.highestRole.position) return message.channel.send("Tu ne peux pas le ban").then(msg => {msg.delete(5000)});
-  const user = message.mentions.users.first();   
+  if (bUser.highestRole.position >= message.member.highestRole.position) return message.channel.send(":x: | Tu ne peux pas le ban, cette utilisateur est au dessus de toi.");
 
-  let banEmbed = new Discord.RichEmbed()
-  .setDescription("~Ban~")
-  .setColor("#bc0000")
-  .addField("Banned User", `${bUser} with ID ${bUser.id}`)
-  .addField("Banned By", `<@${message.author.id}> with ID ${message.author.id}`)
-  .addField("Banned In", message.channel)
-  .addField("Time", message.createdAt)
-  .addField("Reason", bReason);
-
-
-  message.channel.send(`${bUser} à été ban avec succès 💫`).then(msg => {msg.delete(5000)});;
+  message.channel.send(`:white_check_mark: | **<@${bUser.id}>** a été ban avec succès !`);
   message.guild.member(bUser).ban(bReason);
-  
-   let incidentchannel = message.guild.channels.find(`name`, "otaku-logs");
-  if(!incidentchannel) return message.channel.send("Je ne trouve pas le channel``otaku-logs``. \n Vous pouvez créé ce salon pour pouvoir enrengistré les actions de modération");
-  
-    incidentchannel.send(banEmbed);
+  }
+} catch(err) {
+  console.error(err);
+  return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste.');
+};
+
 }
 
 
@@ -34,11 +50,11 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: ['b'],
-  permLevel: 2
+  permLevel: 0
 };
 
 exports.help = {
   name: 'ban',
   description: 'Ban l\'utilisateur mentionné',
-  usage: 'ban [mention] [raison]'
+  usage: 'ban <mention>'
 };

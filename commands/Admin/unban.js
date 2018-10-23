@@ -1,32 +1,45 @@
+const Discord = require("discord.js");
+const fs = require("fs");
+const config = require('../../config.json')
 exports.run = (client, message, args) => {
+
+try {
+
+  if (!user) return message.channel.send(':x: | Tu dois définir l\'ID de la personne à unban.\n```\nUtilisation: ' + prefix + "unban <ID>\n```");
+
     client.unbanAuth = message.author;
     const user = args[0];
-    const modlog = client.channels.find('name', 'otaku-logs');
 
-    if (!message.channel.permissionsFor(message.author).hasPermission("BAN_MEMBERS")) {
-      message.reply (" Tu n'as pas la permission").then(msg => {msg.delete(5000)});
-      return;
-    }
-    else if (!message.channel.permissionsFor(client.user).hasPermission("BAN_MEMBERS")) {
-      message.reply ("Je n'es pas la permission ").then(msg => {msg.delete(5000)});
-      return;
-    }
+    if(!message.channel.permissionsFor(message.author).has("BAN_MEMBERS")) return message.channel.send(':x: | Tu n\'as pas les droits.\n```js\nTu dois avoir les droits: "Bannir des membres"\n```');
+    if(!message.channel.permissionsFor(client.user).has("BAN_MEMBERS")) return message.channel.send(':x: | Tu n\'as pas les droits.\n```js\nJe dois avoir les droits: "Bannir des membres"\n```');
 
-    if (!modlog) return message.reply('Je ne trouve pas le channel ``otaku-logs``');
-    if (!user) return message.reply('Tu dois mettre l\'ID de la personne a deban').catch(console.error);
+    let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
+    if(!prefixes[message.guild.id]){
+      prefixes[message.guild.id] = {
+        prefixes: config.prefix
+      };
+    }
+    let prefix = prefixes[message.guild.id].prefixes;
+
+   
     message.guild.unban(user);
-    message.channel.send(`<@${user}> a bien été deban`).then(msg => {msg.delete(5000)});
+    message.channel.send(`:white_check_mark: | **<@${user}>** a bien été unban !`);
+
+  } catch(err) {
+    console.error(err);
+    return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste.');
+  };
   };
   
   exports.conf = {
     enabled: true,
     guildOnly: false,
     aliases: ['deban'],
-    permLevel: 2
+    permLevel: 0
   };
   
   exports.help = {
     name: 'unban',
-    description: 'Unbans the user.',
-    usage: 'unban [ID]'
+    description: 'Unban un utilisateur.',
+    usage: 'unban <ID>'
   };
