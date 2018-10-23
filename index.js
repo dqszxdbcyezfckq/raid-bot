@@ -3,7 +3,6 @@ const client = new Discord.Client();
 const config = require('./config.json');
 const chalk = require('chalk');
 const fs = require('fs');
-const moment = require('moment');
 require('./util/eventLoader')(client);
 const redcolor = chalk.keyword('red');
 const orangecolor = chalk.keyword('orange');
@@ -12,16 +11,10 @@ const grencolor = chalk.keyword('green');
 const cyancolor = chalk.keyword('cyan');
 const bluecolor = chalk.keyword('blue');
 
-
-const log = message => {
-  console.log(`[${moment().format('HH:mm:ss')}] ${message}`);
-};
-
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 fs.readdir('./commands/Fun/', (err, filesfun) => {
   if (err) console.error(err);
-  console.log(redcolor(`${filesfun.length} commandes fun 😂,`));
   filesfun.forEach(f => {
     const props = require(`./commands/Fun/${f}`);
     client.commands.set(props.help.name, props);
@@ -30,9 +23,18 @@ fs.readdir('./commands/Fun/', (err, filesfun) => {
     });
   });
 
+  fs.readdir('./commands/Image/', (err, filesimg) => {
+    if (err) console.error(err);
+    filesimg.forEach(f => {
+      const props = require(`./commands/Image/${f}`);
+      client.commands.set(props.help.name, props);
+      props.conf.aliases.forEach(alias => {
+        client.aliases.set(alias, props.help.name);
+      });
+    });
+
 fs.readdir('./commands/Info/', (err, filesinfo) => {
   if (err) console.error(err);
-  console.log(orangecolor(`${filesinfo.length} commandes information 💻,`));
   filesinfo.forEach(f => {
     const props = require(`./commands/Info/${f}`);
     client.commands.set(props.help.name, props);
@@ -43,7 +45,6 @@ fs.readdir('./commands/Info/', (err, filesinfo) => {
 
 fs.readdir('./commands/Mod/', (err, filesmod) => {
   if (err) console.error(err);
-  console.log(yellowcolor(`${filesmod.length} commandes modération 🔧,`));
   filesmod.forEach(f => {
     const props = require(`./commands/Mod/${f}`);
     client.commands.set(props.help.name, props);
@@ -54,7 +55,6 @@ fs.readdir('./commands/Mod/', (err, filesmod) => {
 
   fs.readdir('./commands/Admin/', (err, filesadmin) => {
     if (err) console.error(err);
-    console.log(yellowcolor(`${filesadmin.length} commandes administration 🔧,`));
     filesadmin.forEach(f => {
       const props = require(`./commands/Admin/${f}`);
       client.commands.set(props.help.name, props);
@@ -62,28 +62,46 @@ fs.readdir('./commands/Mod/', (err, filesmod) => {
         client.aliases.set(alias, props.help.name);
       });
     });
-    
-    fs.readdir('./commands/test/', (err, filestest) => {
-if (err) console.error(err);
-console.log(cyancolor(`${filestest.length} commandes de raid <3,`));
-filestest.forEach(f => {
-  const props = require(`./commands/test/${f}`);
-  client.commands.set(props.help.name, props);
-  props.conf.aliases.forEach(alias => {
-    client.aliases.set(alias, props.help.name);
+
+fs.readdir('./commands/Social/', (err, filessocial) => {
+  if (err) console.error(err);
+  filessocial.forEach(f => {
+    const props = require(`./commands/Social/${f}`);
+    client.commands.set(props.help.name, props);
+    props.conf.aliases.forEach(alias => {
+      client.aliases.set(alias, props.help.name);
+    });
+  });
+
+fs.readdir('./commands/NSFW/', (err, filesnsfw) => {
+  if (err) console.error(err);
+  filesnsfw.forEach(f => {
+    const props = require(`./commands/NSFW/${f}`);
+    client.commands.set(props.help.name, props);
+    props.conf.aliases.forEach(alias => {
+      client.aliases.set(alias, props.help.name);
+    });
+  });
+   fs.readdir('./commands/Music/', (err, filesmusic) => {
+    if (err) console.error(err);
+    filesmusic.forEach(f => {
+      const props = require(`./commands/Music/${f}`);
+      client.commands.set(props.help.name, props);
+      props.conf.aliases.forEach(alias => {
+        client.aliases.set(alias, props.help.name);
+      });
+    });
+  
+  var totalcmd =  Math.floor(filesfun.length + filesinfo.length + filesmod.length + filessocial.length + filesnsfw.length + filesadmin.length + filesmusic.length + filesimg.length);
+console.log(bluecolor(`Il y a un total de ${totalcmd} commandes 👍.`));
   });
 });
-
-
-  var totalcmd =  Math.floor(filesfun.length + filesinfo.length + filesmod.length + filesadmin.length + filestest.length);
-console.log(bluecolor(`Il y a un total de ${totalcmd} commandes 👍.`));
-
 });
 });
 });
 });
 });
-
+});
 
 client.elevation = message => {
   /* This function should resolve to an ELEVATION level which
@@ -97,18 +115,5 @@ client.elevation = message => {
   return permlvl;
 };
 
-
-var regToken = /[\w\d]{24}\.[\w\d]{6}\.[\w\d-_]{27}/g;
-// client.on('debug', e => {
-//   console.log(chalk.bgBlue.green(e.replace(regToken, 'that was redacted')));
-// });
-
-client.on('warn', e => {
-  console.log(chalk.bgYellow(e.replace(regToken, 'qui a été expurgé')));
-});
-
-client.on('error', e => {
-  console.log(chalk.bgRed(e.replace(regToken, 'qui a été expurgé')));
-});
 
 client.login(process.env.TOKEN);
