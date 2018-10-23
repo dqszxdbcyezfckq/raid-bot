@@ -4,6 +4,24 @@ const ms = require("ms");
 const sm = require("string-similarity");
 
 exports.run = (client, message, args) => {
+
+  try {
+
+  function checkBots(guild) {
+    let botCount = 0; 
+    guild.members.forEach(member => { 
+      if(member.user.bot) botCount++;
+    });
+    return botCount; 
+  }
+
+  function checkMembers(guild) {
+    let memberCount = 0;
+    guild.members.forEach(member => {
+      if(!member.user.bot) memberCount++;
+    });
+    return memberCount;
+  }
   
     if(message.author.bot) return;
   if(message.channel.type !== "text") return;
@@ -37,20 +55,32 @@ exports.run = (client, message, args) => {
     const millisJoined = new Date().getTime() - message.member.joinedAt.getTime();
 const daysJoined = millisJoined / 1000 / 60 / 60 / 24;
   let sicon = message.guild.iconURL;
+  let GuildOwner = client.users.get(message.guild.ownerID)
+
   let serverembed = new Discord.RichEmbed()
-  .setDescription("Informations serveur")
-  .setColor(`${message.guild.me.displayHexColor!=='#00000' ? message.guild.me.displayHexColor : 0xffffff}`)
-  .setThumbnail(sicon)
-  .addField("Nom du serveur", message.guild.name,false )
-  .addField("Date de création", `${moment.utc(member.joinedAt).format("D/M/Y, HH:mm:ss")} ${daysCreated.toFixed(0)} jours`,false)
-  .addField("Date de venue", `${moment.utc(message.member.joinedAt).format("D/M/Y, HH:mm:ss")} ${daysJoined.toFixed(0)} jours`, false )
-  .addField("Membres Totaux", message.guild.memberCount,false)
-  .addField ("Propriétaire du serveur", `<@${message.guild.owner.id}>`,false)
-  .addField ("ID du serveur", message.guild.id, false)
- .setImage ( sicon)
-.setTimestamp()
-  .setFooter(`${message.author.username} | Server Info`);
-  return message.channel.send(serverembed);
+  .setTitle(message.guild.name + " - Informations")
+  .setColor(Math.floor(Math.random() * 16777214) + 1)
+  //.setThumbnail(sicon)
+  .addField ("Propriétaire du serveur:", `${GuildOwner.tag}`,true)
+  .addField ("ID:", `${message.guild.id}`,true)
+  .addField("Membres", message.guild.memberCount, true)
+  .addField('Humains:', checkMembers(message.guild), true)
+  .addField('Bots:', checkBots(message.guild), true)
+  .addField("Channels:", message.guild.channels.size, true)
+  .addField('Niveau de vérification:', message.guild.verificationLevel, true)
+  .addField("Région:", message.guild.region, true)
+  .addField("Date de création:", `${moment(message.guild.createdAt).format('D/M/Y HH:mm:ss')} | ${daysCreated.toFixed(0)} jours`, true)
+  //.addField("Date de venue", `${moment.utc(message.member.joinedAt).format("D/M/Y, HH:mm:ss")} ${daysJoined.toFixed(0)} jours`, true )
+  .addField("Rôles:", "Il y a **" + message.guild.roles.size + "** rôles.", false)
+  .addField("Emojis:", "Il y a **" + message.guild.emojis.size + "** emojis.", false)
+  .setFooter(client.user.username, client.user.displayAvatarURL).setTimestamp()
+
+  message.channel.send(serverembed);
+
+} catch(err) {
+  console.error(err);
+  return message.channel.send(':x: | Une erreur c\'est produite lors du traitement de la commande.\nVeuillez envoyer un report de la commande si ce message persiste');
+};
 
 }
  
