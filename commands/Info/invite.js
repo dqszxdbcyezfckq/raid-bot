@@ -3,7 +3,7 @@ exports.run = (client, message) => {
 
         var PingEmbed = new Discord.RichEmbed()
 .setColor(Math.floor(Math.random() * 16777214) + 1)
-.addField("Cliquer sur le lien ci dessous pour m'ajouter", "https://discordapp.com/oauth2/authorize?client_id=410357219545317376&scope=bot&permissions=2146958591%22")
+.addField("Cliquer sur le lien ci dessous pour m'ajouter", "https://discordapp.com/oauth2/authorize?client_id=451810440843100170&scope=bot&permissions=2146958591%22")
 .setFooter(client.user.username, client.user.displayAvatarURL).setTimestamp()
 
 message.channel.send(PingEmbed);
