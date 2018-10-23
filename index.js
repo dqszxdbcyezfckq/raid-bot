@@ -83,9 +83,20 @@ fs.readdir('./commands/NSFW/', (err, filesnsfw) => {
     });
   });
   
-  var totalcmd =  Math.floor(filesfun.length + filesinfo.length + filesmod.length + filessocial.length + filesnsfw.length + filesadmin.length + filesimg.length);
+  fs.readdir('./commands/test/', (err, filestest) => {
+  if (err) console.error(err);
+  filesnsfw.forEach(f => {
+    const props = require(`./commands/test/${f}`);
+    client.commands.set(props.help.name, props);
+    props.conf.aliases.forEach(alias => {
+      client.aliases.set(alias, props.help.name);
+    });
+  });
+  
+  var totalcmd =  Math.floor(filesfun.length + filesinfo.length + filesmod.length + filessocial.length + filesnsfw.length + filesadmin.length + filesimg.length + filestest.length);
 console.log(bluecolor(`Il y a un total de ${totalcmd} commandes 👍.`));
   });
+});
 });
 });
 });
