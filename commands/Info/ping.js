@@ -2,7 +2,7 @@
 
 exports.run = async (client, message) => {
 
-message.channel.send(`**${client.user.username} ping!** :ping_pong: ${new Date().getTime() - message.createdTimestamp}ms <:OchakoCrying:470624866970894337>`);
+message.channel.send(`**${client.user.username} ping!** :ping_pong: ${new Date().getTime() - message.createdTimestamp}ms`);
 
 };
   
