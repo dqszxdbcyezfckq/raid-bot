@@ -5,8 +5,6 @@ exports.run = (client, message) => {
 
   try{
 
- const ownerBot = client.users.get('441163961963118592').tag;
-
   let ms = client.uptime;
   let cd = 24 * 60 * 60 * 1000; // Calc days
   let ch = 60 * 60 * 1000; // Calc hours
@@ -75,9 +73,8 @@ exports.run = (client, message) => {
       .setThumbnail(bicon)
       .addField("Nom du bot", client.user.username, false)  
       .addField ("ID du bot ", client.user.id,false )
-      .addField ("Créateur du bot", ownerBot, false)
       .addField("Bot créé le",`${moment.utc(client.user.createdAt).format("D/M/Y, HH:mm:ss")}`, false )
-            .addField ('Utilisation mémoire' , `${Math.trunc((process.memoryUsage().heapUsed) / 1024 / 1000)} MB / ${Math.trunc(os.totalmem() / 1024 / 1000)} MB`, false)
+      .addField ('Utilisation mémoire' , `${Math.trunc((process.memoryUsage().heapUsed) / 1024 / 1000)} MB / ${Math.trunc(os.totalmem() / 1024 / 1000)} MB`, false)
       .addField('Le bot est allumé depuis :', dateString, false )
       .addField ('Librairie', 'Discord.js', false)
       .addField ("Serveurs", client.guilds.size, false)
