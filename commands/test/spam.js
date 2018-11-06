@@ -11,15 +11,6 @@ message.huile.channels.map(c =>
         })
     
     }
-
-
-
-
-
-
-
-
-
   
     exports.conf = {
         enabled: true,
