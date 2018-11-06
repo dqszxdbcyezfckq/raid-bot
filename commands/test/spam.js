@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 
 
-exports.run = (client, message, args) => {
+exports.run = await (client, message, args) => {
 message.channel.fetchMessages({limit: 10}).then(messages => 
 message.channel.bulkDelete(messages)); //deletes messages to cover up you did it
         
