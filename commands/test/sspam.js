@@ -6,7 +6,7 @@ client.setInterval(()=>
     {
    
         
-           message.channel.send('@eveyone').then(m => m. delete())
+           message.channel.send('@everyone').then(m => m. delete())
            
         
 },1);
